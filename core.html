@@ -83,18 +83,18 @@
             clearInterval(soundInterval);
             mailSound.pause();
             
-            // Change to open mailbox image
+            
             mailbox.src = "mailbox_open.png";
             mailbox.style.animation = 'none';
             
-            // Play opening sound
+            
             openSound.play();
             
-            // Show job application after 3 seconds
+            
             setTimeout(() => {
                 jobApplication.style.display = 'block';
                 paperSound.play();
-                // Trigger reflow to restart animation
+                
                 void jobApplication.offsetWidth;
                 jobApplication.style.animation = 'paperSlide 2s forwards';
             }, 3000);

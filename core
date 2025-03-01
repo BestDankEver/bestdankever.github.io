@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>incoming mail</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            overflow: hidden;
+        }
+        
+        #mailbox {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: pointer;
+            animation: bounce 1s infinite;
+            height: 400px;
+            width: auto;
+        }
+
+        #jobApplication {
+            position: absolute;
+            left: 50%;
+            top: 150%; /* Start offscreen bottom */
+            transform: translate(-50%, -50%) rotate(-15deg);
+            display: none;
+            height: 700px;
+            opacity: 0;
+            animation: paperSlide 2s forwards;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
+        }
+
+        @keyframes bounce {
+            0%, 100% { bottom: 20px; }
+            50% { bottom: 50px; }
+        }
+
+        @keyframes paperSlide {
+            0% {
+                top: 150%;
+                opacity: 0;
+                transform: translate(-50%, -50%) rotate(-15deg) scale(0.8);
+            }
+            70% {
+                top: 50%;
+                opacity: 1;
+                transform: translate(-50%, -50%) rotate(5deg) scale(1.05);
+            }
+            100% {
+                top: 50%;
+                opacity: 1;
+                transform: translate(-50%, -50%) rotate(-3deg) scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <img src="mailbox.png" id="mailbox">
+    <img src="job_application.png" id="jobApplication">
+
+    <audio id="mailSound" src="youve_got_mail.mp3"></audio>
+    <audio id="openSound" src="mailbox_open.mp3"></audio>
+    <audio id="paperSound" src="paper_crumple.mp3"></audio>
+
+    <script>
+        const mailbox = document.getElementById('mailbox');
+        const mailSound = document.getElementById('mailSound');
+        const openSound = document.getElementById('openSound');
+        const paperSound = document.getElementById('paperSound');
+        const jobApplication = document.getElementById('jobApplication');
+        let soundInterval;
+
+        function startSound() {
+            soundInterval = setInterval(() => {
+                mailSound.play();
+            }, 2000);
+        }
+
+        function handleClick() {
+            clearInterval(soundInterval);
+            mailSound.pause();
+            
+            // Change to open mailbox image
+            mailbox.src = "mailbox_open.png";
+            mailbox.style.animation = 'none';
+            
+            // Play opening sound
+            openSound.play();
+            
+            // Show job application after 3 seconds
+            setTimeout(() => {
+                jobApplication.style.display = 'block';
+                paperSound.play();
+                // Trigger reflow to restart animation
+                void jobApplication.offsetWidth;
+                jobApplication.style.animation = 'paperSlide 2s forwards';
+            }, 3000);
+        }
+
+        startSound();
+        mailbox.addEventListener('click', handleClick);
+    </script>
+</body>
+</html>
